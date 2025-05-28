@@ -1,4 +1,4 @@
-package com.dhana;
+package org.acme;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
