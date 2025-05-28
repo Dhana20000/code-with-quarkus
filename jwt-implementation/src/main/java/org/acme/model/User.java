@@ -1,11 +1,13 @@
 package org.acme.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor

@@ -1,10 +1,8 @@
 package org.acme.resource;
 
 import io.quarkus.security.Authenticated;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -19,15 +17,23 @@ import java.util.Set;
 @Path("/user")
 @Authenticated
 public class GreetingResource {
-    @Inject
-    JWTParser jwtParser;
 
     @GET
+    @Path("/getJWTToken")
     @Produces(MediaType.APPLICATION_JSON)
     public User getUserInfo(@Context SecurityContext securityContext) throws ParseException {
-        // Get the JWT principal directly from the SecurityContext
-        JsonWebToken jwt = (JsonWebToken) securityContext.getUserPrincipal();
+        return setUser(securityContext);
+    }
 
+    @GET
+    @Path("/getUserName")
+    @RolesAllowed({"ADMIN", "GLOBAL_ADMIN"})
+    public String getUserName(@Context SecurityContext securityContext) {
+        return setUser(securityContext).getName();
+    }
+
+    public User setUser(SecurityContext securityContext) {
+        JsonWebToken jwt = (JsonWebToken) securityContext.getUserPrincipal();
         String name = jwt.getSubject();
         String email = jwt.getClaim("upn");
         String phone = jwt.getClaim("phone");
